@@ -1,0 +1,21 @@
+{
+  "name": "effective-guacamole",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lsharp256/effective-guacamole.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lsharp256/effective-guacamole/issues"
+  },
+  "homepage": "https://github.com/lsharp256/effective-guacamole#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.30.0"
+  }
+}
