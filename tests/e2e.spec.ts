@@ -1,28 +1,25 @@
 import { test, expect } from '@playwright/test';
 import { generateRandomEmail } from '../utils';
+import { email, password } from '../utils';
 import RegistrationPage from './Pages/registration.page';
 import LoginPage from './Pages/login.page';
 
-const email = generateRandomEmail();
+const random_email = generateRandomEmail();
 
 test('Sign-up here link', async ({ page }) => {
   await page.goto('https://demo.seenons.com/');
-
-  // Click the get started link.
   await page.getByRole('link', { name: 'Sign-up here!' }).click();
-
-  // Expects the URL to contain intro.
   await expect(page).toHaveURL(/.*register/);
 });
 
-test('Registration new user flow', (async ({ page }) => {
+test('Complete name and contact number', (async ({ page }) => {
   const registrationPage = new RegistrationPage(page);
   await registrationPage.goto();
-  await page.getByPlaceholder('Enter your e-mail').fill('testuser6@gmail.com');
+  await page.getByPlaceholder('Enter your e-mail').fill(email);
   await page.getByLabel('I confirm that I have read, consent and agree to Seenons Terms & Conditions and Privacy Policy , and I am legally approved for ordering. I understand that I can change my communication preferences any time via  privacy@seenons.com .').check();
   await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByLabel('Password*', { exact: true }).fill('Test12345');
-  await page.getByLabel('Confirm password*').fill('Test12345');
+  await page.getByLabel('Password*', { exact: true }).fill(password);
+  await page.getByLabel('Confirm password*').fill(password);
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByPlaceholder('Enter your first name').fill('Test');
   await page.getByPlaceholder('Enter your last name').fill('User');
@@ -30,13 +27,14 @@ test('Registration new user flow', (async ({ page }) => {
   await expect(page.getByText('Thanks for signing up!')).toBeVisible();
 }));
 
-test('Sign in and complete registration', (async ({ page }) => {
+test('Complete contact details', (async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await page.getByRole('button', { name: 'Sign in' }).click();
-  await page.getByPlaceholder('Enter your e-mail').fill('testuser6@gmail.com');
-  await page.getByPlaceholder('Enter your password').fill('Test12345');
+  await page.getByPlaceholder('Enter your e-mail').fill(email);
+  await page.getByPlaceholder('Enter your password').fill(password);
   await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('button', { name: 'Contact Details' }).waitFor();
   await page.getByRole('button', { name: 'Contact Details' }).click();
   await page.getByPlaceholder('Enter your phone number').click();
   await page.getByPlaceholder('Enter your phone number').fill('0112234567');
@@ -57,13 +55,52 @@ test('Sign in and complete registration', (async ({ page }) => {
   await page.getByRole('link').click();
 }));
 
-// test('Invalid login details', (async ({ page }) => {
-//   const loginPage = new LoginPage(page);
-//   await loginPage.goto();
-//   await page.getByRole('button', { name: 'Sign in' }).click();
-//   await page.getByPlaceholder('Enter your e-mail').fill('bademail@gmail');
-//   await page.getByPlaceholder('Enter your password').fill('Test12345');
-//   await page.getByRole('button', { name: 'Sign in' }).click();
-
-//   await expect(page.getByText('Please match the requested format.')).toBeVisible();
-// }))
+test('Waste removal selection and payment details', (async ({ page}) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await page.getByPlaceholder('Enter your e-mail').fill(email);
+  await page.getByPlaceholder('Enter your password').fill(password);
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('button', { name: 'Contact Details' }).waitFor();
+  await page.getByRole('button', { name: 'Contact Details' }).click();
+  await page.getByPlaceholder('Enter your phone number').fill('0122387346');
+  await page.getByRole('button', { name: 'Confirm' }).click();
+  await page.getByRole('button', { name: 'Address' }).click();
+  await page.getByPlaceholder('Enter name').fill('Test Business');
+  await page.getByPlaceholder('Enter your street').fill('Test Street');
+  await page.getByPlaceholder('Enter your house number').fill('123');
+  await page.getByPlaceholder('Enter your postal code').fill('1019');
+  await page.getByPlaceholder('Enter your city').fill('Amsterdam');
+  await page.getByRole('combobox', { name: 'Country*' }).selectOption('NL');
+  await page.getByRole('button', { name: 'Confirm' }).click();
+  await page.getByRole('button', { name: 'Get started!' }).click();
+  await page.getByRole('button', { name: 'Residual Waste restafval Learn more' }).click();
+  await page.getByRole('button', { name: '240L 240L All prices are excl. VAT Pickup Per pickup €14.75 Rent Per month €3.50 Placement One-time fee €50.00 Select quantity:' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('combobox', { name: 'Which pickup schedule type do you want for this stream?' }).selectOption('weekly');
+  await page.getByRole('button', { name: 'M.' }).click();
+  await page.getByRole('button', { name: 'T.' }).nth(1).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Checkout' }).click();
+  await page.getByRole('button', { name: 'Select payment method' }).click();
+  await page.getByRole('button', { name: 'Bank Transfer'}).click();
+  await page.getByRole('button', { name: 'Edit' }).waitFor();
+  await page.getByRole('button', { name: 'Edit' }).isEnabled();
+  await page.getByRole('button', { name: 'Edit' }).click();
+  await page.getByPlaceholder('Enter name').fill('Test User');
+  await page.getByLabel('E-mail*').fill('testemail@gmail.com');
+  await page.getByPlaceholder('Enter your street').fill('123');
+  await page.getByPlaceholder('Enter your postal code').fill('1019');
+  await page.getByPlaceholder('Enter your city').fill('Amsterdam');
+  await page.getByRole('combobox', { name: 'Country*' }).selectOption('NL');
+  await page.getByLabel('VAT number').click();
+  await page.getByLabel('VAT number').fill('12345678');
+  await page.getByLabel('COC number').fill('654321');
+  await page.getByRole('button', { name: 'Confirm' }).click();
+  await page.getByPlaceholder('Enter your house number').fill('345');
+  await page.getByRole('button', { name: 'Confirm' }).click();
+  await page.getByRole('button', { name: 'Verify payment method' }).click();
+  await expect(page.getByText('You\'re all set up!')).toBeVisible();
+  await loginPage.logout();
+}));

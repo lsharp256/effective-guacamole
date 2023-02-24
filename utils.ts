@@ -3,3 +3,6 @@ export function generateRandomEmail(): string {
     const randomEmail = `user-${randomString}@example.com`;
     return randomEmail;
 }
+
+export const email: string = 'example4@example.com';
+export const password: string = 'Test12345';

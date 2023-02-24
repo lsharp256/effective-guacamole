@@ -11,5 +11,9 @@ constructor(page: Page) {
 async goto() {
     await this.page.goto('https://demo.seenons.com/login');
     }
+
+async logout() {
+    await this.page.goto('https://demo.seenons.com/logout')
+    }
 }
 

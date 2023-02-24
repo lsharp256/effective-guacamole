@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/lsharp256/effective-guacamole#readme",
   "devDependencies": {
-    "@playwright/test": "^1.30.0"
+    "@playwright/test": "^1.31.1"
   }
 }
